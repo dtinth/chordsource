@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { get, set } from "idb-keyval";
-import fuzzysort from "fuzzysort";
+import fuzzysort, { prepare } from "fuzzysort";
 import { eventHandlers } from "./eventHandlers";
 import { convert } from "gode.js";
 
@@ -22,11 +22,24 @@ export interface ChordItem {
   url: string;
 }
 
-const $chords = atom([] as ChordItem[]);
+const $chords = atom([] as PreparedChordItem[]);
 const $loadingStatus = atom("กำลังโหลดข้อมูลล่าสุด");
 
 function getUnknownRev() {
   return String(Math.floor(new Date().getTime() / 300e3));
+}
+
+export interface PreparedChordItem extends ChordItem {
+  search: Fuzzysort.Prepared;
+}
+
+function prepareForSearch(items: ChordItem[]): PreparedChordItem[] {
+  return items.map((item) => {
+    return {
+      ...item,
+      search: prepare(item.title + " " + item.artist),
+    };
+  });
 }
 
 async function reloadData(rev: string) {
@@ -57,7 +70,7 @@ async function reloadData(rev: string) {
     xhr.send();
   });
 
-  $chords.set(chords);
+  $chords.set(prepareForSearch(chords));
 
   return chords;
 }
@@ -65,7 +78,7 @@ async function reloadData(rev: string) {
 async function ensureData() {
   const latestData = await get("chordsource");
   if (Array.isArray(latestData?.data)) {
-    $chords.set(latestData.data);
+    $chords.set(prepareForSearch(latestData.data));
     const { hash } = await getLatestMetadata();
     if (latestData.hash === hash) {
       return;
@@ -106,7 +119,7 @@ export function ChordSearch(props: ChoreSearch) {
     const fixed = convert("QWERTY", "Kedmanee", searchText);
     const search = (text: string) =>
       fuzzysort.go(text, chords, {
-        keys: ["title", "artist"],
+        key: "search",
         limit: 50,
       });
     type SearchResult = ReturnType<typeof search>;
