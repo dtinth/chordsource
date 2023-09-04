@@ -27,6 +27,7 @@ export function toggleVoiceSearch(callback: (text: string) => void) {
   };
   voiceActive.set(true);
   recognition.onend = function () {
+    current = null;
     voiceActive.set(false);
   };
   recognition.start();
