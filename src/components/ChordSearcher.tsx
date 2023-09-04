@@ -72,6 +72,7 @@ export default function ChordSearcher() {
             onClick={() => {
               if (ref.current) {
                 ref.current.value = "";
+                ref.current.focus();
               }
               setSearch("");
             }}
