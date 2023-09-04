@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { get } from "idb-keyval";
+import { get, set } from "idb-keyval";
 import fuzzysort from "fuzzysort";
 import { eventHandlers } from "./eventHandlers";
 
@@ -28,7 +28,7 @@ function getUnknownRev() {
 }
 
 async function reloadData(rev: string) {
-  const url = "https://db.chord.source.in.th/data.json?rev=";
+  const url = "https://db.chord.source.in.th/data.json?rev=" + rev;
 
   // Use XMLHttpRequest instead of fetch() to be able to track progress
   const chords = await new Promise<ChordItem[]>((resolve, reject) => {
@@ -64,9 +64,33 @@ async function ensureData() {
   const latestData = await get("chordsource");
   if (Array.isArray(latestData?.data)) {
     $chords.set(latestData.data);
+    const { hash } = await getLatestMetadata();
+    if (latestData.hash === hash) {
+      return;
+    }
+    const data = await reloadData(hash);
+    await set("chordsource", { data, hash });
   } else {
-    await reloadData(getUnknownRev());
+    const latestMetadataPromise = getLatestMetadata();
+    const data = await reloadData(getUnknownRev());
+    const { hash } = await latestMetadataPromise;
+    await set("chordsource", { data, hash });
   }
+}
+
+async function getLatestMetadata() {
+  const response = await fetch(
+    "https://db.chord.source.in.th/latest.json?rev=" + getUnknownRev()
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const metadata = await response.json();
+  const { hash } = metadata;
+  if (!hash) {
+    throw new Error("Missing hash");
+  }
+  return { hash };
 }
 
 export interface ChoreSearch {
