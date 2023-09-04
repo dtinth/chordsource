@@ -103,7 +103,7 @@ export function ChordSearch(props: ChoreSearch) {
   const searchResult = useMemo(() => {
     return fuzzysort.go(searchText, chords, {
       keys: ["title", "artist"],
-      limit: 20,
+      limit: 50,
     });
   }, [chords, searchText]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -140,7 +140,7 @@ export function ChordSearch(props: ChoreSearch) {
           {searchResult.map((result, i) => {
             return (
               <li
-                key={i}
+                key={result.obj.url}
                 className={
                   "border-t first-of-type:border-t-0 border-slate-700 " +
                   (i === selectedIndex ? "bg-slate-800 text-yellow-300" : "")
