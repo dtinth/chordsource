@@ -16,6 +16,7 @@ import { convert } from "gode.js";
 let active = false;
 
 export interface ChordItem {
+  id: string;
   title: string;
   artist: string;
   url: string;
@@ -178,17 +179,19 @@ export function ChordSearch(props: ChoreSearch) {
                   data-selected={i === selectedIndex}
                   onClick={() => {
                     const params = new URLSearchParams();
+                    params.set("id", `${result.obj.id}`);
                     params.set("link", result.obj.url);
                     params.set("title", result.obj.title);
                     params.set("artist", result.obj.artist);
+                    params.set("index", String(i));
                     params.set("query", searchText);
                     params.set(
                       "sid",
-                      (sessionStorage.sid ??= crypto.randomUUID())
+                      (sessionStorage.sid ??= crypto.randomUUID().slice(0, 8))
                     );
                     params.set(
                       "lid",
-                      (localStorage.lid ??= crypto.randomUUID())
+                      (localStorage.lid ??= crypto.randomUUID().slice(0, 8))
                     );
                     params.set("host", location.hostname);
                     navigator.sendBeacon(
