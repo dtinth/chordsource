@@ -126,7 +126,20 @@ export function ChordSearch(props: ChoreSearch) {
       console.log(fixed);
       doSearch(fixed);
     }
-    return Array.from(map.values()).sort((a, b) => b.score - a.score);
+    return [
+      ...Array.from(map.values()).sort((a, b) => b.score - a.score),
+      {
+        obj: {
+          id: "google",
+          title: searchText,
+          artist: "ค้นหาใน Google",
+          url: `https://www.google.com/search?q=${encodeURIComponent(
+            searchText
+          )}`,
+        },
+        score: 0,
+      },
+    ];
   }, [chords, searchText]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
@@ -170,6 +183,7 @@ export function ChordSearch(props: ChoreSearch) {
                 onMouseEnter={() => {
                   setSelectedIndex(i);
                 }}
+                data-score={result.score}
               >
                 <a
                   href={result.obj.url}
@@ -208,6 +222,9 @@ export function ChordSearch(props: ChoreSearch) {
                   )}
                   {result.obj.url.startsWith("https://www.dochord") && (
                     <IconImage image={dochordIcon} />
+                  )}
+                  {result.obj.url.startsWith("https://www.google") && (
+                    <IconImage image={"https://www.google.com/favicon.ico"} />
                   )}
                   <span>
                     <strong>{result.obj.title}</strong>
