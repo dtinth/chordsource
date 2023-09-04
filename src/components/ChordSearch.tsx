@@ -189,7 +189,7 @@ export function ChordSearch(props: ChoreSearch) {
                   href={result.obj.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-1 flex gap-2 items-center"
+                  className="px-4 py-1 flex gap-2 items-center overflow-hidden"
                   data-selected={i === selectedIndex}
                   onClick={() => {
                     const params = new URLSearchParams();
