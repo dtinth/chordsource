@@ -35,7 +35,7 @@ export default function ChordSearcher() {
     <div>
       <div className="flex gap-3 items-center">
         <input
-          type="text"
+          type="search"
           autoFocus
           className="flex-auto block w-full bg-slate-800 text-white border border-slate-700 rounded-lg px-4 py-2"
           placeholder="ชื่อเพลง หรือ ศิลปิน"
@@ -64,6 +64,21 @@ export default function ChordSearcher() {
             }
           }}
         />
+        {!!search && (
+          <button
+            className={
+              "flex-none w-12 h-12 rounded-full  text-white border flex items-center justify-center bg-slate-800 border-slate-700"
+            }
+            onClick={() => {
+              if (ref.current) {
+                ref.current.value = "";
+              }
+              setSearch("");
+            }}
+          >
+            <Icon inline icon="material-symbols:close" />
+          </button>
+        )}
         {voiceSearchSupported && (
           <VoiceSearchButton
             onText={(text) => {
@@ -75,7 +90,7 @@ export default function ChordSearcher() {
           />
         )}
       </div>
-      <div className="mt-4">
+      <div className="mt-4 text-lg">
         <Suspense fallback={<Loading text="Loading app…" />}>
           <ChordSearch searchText={searchText} />
         </Suspense>
