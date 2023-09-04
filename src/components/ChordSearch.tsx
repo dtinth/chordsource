@@ -11,6 +11,7 @@ import {
 import { get, set } from "idb-keyval";
 import fuzzysort from "fuzzysort";
 import { eventHandlers } from "./eventHandlers";
+import { convert } from "gode.js";
 
 let active = false;
 
@@ -101,10 +102,30 @@ export function ChordSearch(props: ChoreSearch) {
   const chords = useStore($chords);
   const searchText = props.searchText;
   const searchResult = useMemo(() => {
-    return fuzzysort.go(searchText, chords, {
-      keys: ["title", "artist"],
-      limit: 50,
-    });
+    const fixed = convert("QWERTY", "Kedmanee", searchText);
+    const search = (text: string) =>
+      fuzzysort.go(text, chords, {
+        keys: ["title", "artist"],
+        limit: 50,
+      });
+    type SearchResult = ReturnType<typeof search>;
+    type SearchResultItem = SearchResult[0];
+    const map = new Map<string, SearchResultItem>();
+    const doSearch = (text: string) => {
+      const result = search(text);
+      for (const item of result) {
+        const existing = map.get(item.obj.url);
+        if (!existing || item.score > existing.score) {
+          map.set(item.obj.url, item);
+        }
+      }
+    };
+    doSearch(searchText);
+    if (fixed !== searchText) {
+      console.log(fixed);
+      doSearch(fixed);
+    }
+    return Array.from(map.values()).sort((a, b) => b.score - a.score);
   }, [chords, searchText]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {

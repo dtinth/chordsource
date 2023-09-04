@@ -26,6 +26,9 @@ dependencies:
   fuzzysort:
     specifier: ^2.0.4
     version: 2.0.4
+  gode.js:
+    specifier: 2.1.0
+    version: 2.1.0
   idb-keyval:
     specifier: ^6.2.1
     version: 6.2.1
@@ -1728,6 +1731,10 @@ packages:
   /globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
     engines: {node: '>=4'}
+    dev: false
+
+  /gode.js@2.1.0:
+    resolution: {integrity: sha512-jX4IB6elBkg6uJ9rifAL90v9u8JofOWWY/f3K6gwoVNbf/eiVW3ARNCIpDfLAzUxuLDDSCFp61a/UruNLFixqw==}
     dev: false
 
   /graceful-fs@4.2.11:
