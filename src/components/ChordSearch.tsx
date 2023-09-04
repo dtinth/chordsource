@@ -176,6 +176,26 @@ export function ChordSearch(props: ChoreSearch) {
                   rel="noreferrer"
                   className="px-4 py-1 flex gap-2 items-center"
                   data-selected={i === selectedIndex}
+                  onClick={() => {
+                    const params = new URLSearchParams();
+                    params.set("link", result.obj.url);
+                    params.set("title", result.obj.title);
+                    params.set("artist", result.obj.artist);
+                    params.set("query", searchText);
+                    params.set(
+                      "sid",
+                      (sessionStorage.sid ??= crypto.randomUUID())
+                    );
+                    params.set(
+                      "lid",
+                      (localStorage.lid ??= crypto.randomUUID())
+                    );
+                    params.set("host", location.hostname);
+                    navigator.sendBeacon(
+                      "https://chordsource.glitch.me/rec",
+                      params
+                    );
+                  }}
                 >
                   {result.obj.url.startsWith("https://busk") && (
                     <IconImage image={buskTownIcon} />
