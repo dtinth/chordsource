@@ -145,6 +145,9 @@ export function ChordSearch(props: ChoreSearch) {
                   "border-t first-of-type:border-t-0 border-slate-700 " +
                   (i === selectedIndex ? "bg-slate-800 text-yellow-300" : "")
                 }
+                onMouseEnter={() => {
+                  setSelectedIndex(i);
+                }}
               >
                 <a
                   href={result.obj.url}
