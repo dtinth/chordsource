@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { get, set } from "idb-keyval";
-import fuzzysort, { prepare } from "fuzzysort";
+import fuzzysort from "fuzzysort";
 import { eventHandlers } from "./eventHandlers";
 import { convert } from "gode.js";
 
@@ -37,7 +37,9 @@ function prepareForSearch(items: ChordItem[]): PreparedChordItem[] {
   return items.map((item) => {
     return {
       ...item,
-      search: prepare(item.title + " " + item.artist),
+      search: fuzzysort.prepare(
+        item.title + " " + item.artist + " " + item.title
+      ),
     };
   });
 }
