@@ -6,11 +6,18 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="og:image"
+      content="https://screenshot.source.in.th/image/_/chordsource-og"
+    />
+    <meta property="og:site_name" content="chord.source.in.th" />
+    <meta property="og:url" content="https://chord.source.in.th/" />
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
+    <meta name="description" content="เครื่องมือหาคอร์ดจากเว็บต่างๆ" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
@@ -49,7 +56,14 @@ const { title } = Astro.props;
     background-size: 224px;
   }
   code {
-    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    font-family:
+      Menlo,
+      Monaco,
+      Lucida Console,
+      Liberation Mono,
+      DejaVu Sans Mono,
+      Bitstream Vera Sans Mono,
+      Courier New,
+      monospace;
   }
 </style>
