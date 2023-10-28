@@ -10,8 +10,6 @@ export default defineConfig({
     tailwind(),
     react(),
     AstroPWA({
-      injectRegister: "auto",
-      registerType: "autoUpdate",
       manifest: {
         name: "chordsource",
         short_name: "chord",
